@@ -10,8 +10,8 @@ class Index(type):
         type (type): Metaclass.
     """
     def __init__(cls, *args, **kwargs):
-        if hasattr(cls, "indices"):
-            cls.get_instancia().create_index(cls.indices)
+        if hasattr(cls, "index"):
+            cls.get_instance().create_index(cls.index, unique=True)
         super().__init__(*args, **kwargs)
 
 
