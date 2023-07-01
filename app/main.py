@@ -7,6 +7,8 @@ from settings import settings
 
 from version import __version__
 
+from routers import user_router
+
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -33,6 +35,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+app.include_router(user_router)
 
 @app.get("/health_check")
 def health_check():
