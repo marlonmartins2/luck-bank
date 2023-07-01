@@ -22,4 +22,7 @@ class Settings(BaseSettings):
     PATH_CERT: str
     DATABASE_ENVIRONMENT: str
 
+    #config settings
+    MINIMUM_PASSWORD_LENGTH: int = 8
+
 settings = Settings()
