@@ -1,0 +1,11 @@
+bcrypt==4.0.1
+boto3==1.26.133
+fastapi==0.95.1
+pydantic[email]==1.10.7
+pydantic[dotenv]==1.10.7
+PyJWT==2.7.0
+PyYAML==6.0
+pymongo==4.3.3
+requests==2.30.0
+sentry_sdk==1.22.2
+uvicorn==0.22.0
