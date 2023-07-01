@@ -5,12 +5,14 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from settings import settings
 
+from version import __version__
+
 
 app = FastAPI(
     title=settings.APP_NAME,
     description=settings.APP_DESCRIPTION,
     debug=settings.DEBUG,
-    version="1.0",
+    version=__version__,
     contact={
         "name": "Marlon Martins",
         "url": "https://github.com/marlonmartins2",

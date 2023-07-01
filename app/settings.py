@@ -14,13 +14,12 @@ class Settings(BaseSettings):
     APP_NAME: str
     APP_DESCRIPTION: str
     CORS_ORIGINS: list
-    ENVIROMENT: str
     DEBUG: bool
 
     # Database settings
     MONGO_URL: str
     MONGO_SSL: str
     PATH_CERT: str
-    DATABASE_ENVIROMENT: str
+    DATABASE_ENVIRONMENT: str
 
 settings = Settings()
