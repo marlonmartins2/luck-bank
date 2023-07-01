@@ -3,9 +3,13 @@ from http import HTTPStatus
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
+from settings import settings
+
 
 app = FastAPI(
-    title="Luck Bank API",
+    title=settings.APP_NAME,
+    description=settings.APP_DESCRIPTION,
+    debug=settings.DEBUG,
     version="1.0",
     contact={
         "name": "Marlon Martins",
@@ -21,7 +25,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
