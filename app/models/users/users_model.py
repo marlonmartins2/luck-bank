@@ -2,31 +2,35 @@ from uuid import uuid4
 
 from random import randint
 
-from datetime import datetime, date
+from datetime import datetime
 
-from pydantic import BaseModel, SecretStr, EmailStr
+from pydantic import EmailStr
 
 from typing import Optional, List, Dict
 
 from models.users import DocumentTypeEnum, StatusEnum, AccountTypeEnum
 
+from models import TimeStampModel
 
-class Documents(BaseModel):
+
+class Documents(TimeStampModel):
     """
     Model for documents
     Args:
-        BaseModel (Model): Model for documents
+        TimeStampModel (Model): The global model insert timestamp on model
     """
+    user_id: Optional[str]
     document_type: DocumentTypeEnum
     document_number: str
 
 
-class Address(BaseModel):
+class Address(TimeStampModel):
     """
     Model for address
     Args:
-        BaseModel (Model): Model for address
+        TimeStampModel (Model): The global model insert timestamp on model
     """
+    user_id: Optional[str]
     street: str
     number: str
     complement: Optional[str]
@@ -37,89 +41,60 @@ class Address(BaseModel):
     zip_code: str
 
 
-class UserBankAccount(BaseModel):
+class UserBankAccount(TimeStampModel):
     """
     Model for user bank account
     Args:
-        BaseModel (Model): Model for user bank account
+        TimeStampModel (Model): The global model insert timestamp on model
     """
     id: str = str(uuid4())
     user_id: str
     account_type: AccountTypeEnum
     account_number: int = randint(100000, 999999)
     account_digit: int = randint(0, 9)
-    agency: int = randint(1000, 9999)
-    agency_digit: int = randint(0, 9)
+    agency: int = '0001'
+    agency_digit: int = 0
     status: StatusEnum = StatusEnum.PENDING
-    created_at: datetime = datetime.now()
-    updated_at: datetime = ""
-    deleted_at: datetime = ""
 
 
-class UserBankAccountCreateRequest(BaseModel):
+class UserBankAccountCreateRequest(TimeStampModel):
     """
     Model for user bank account create from request
     Args:
-        BaseModel (Model): Model for user bank account create from request
+        TimeStampModel (Model): The global model insert timestamp on model
     """
     account_type: AccountTypeEnum
 
 
-class User(BaseModel):
+class User(TimeStampModel):
     """
     Model for user
     Args:
-        BaseModel (Model): Model for user
+        TimeStampModel (Model): The global model insert timestamp on model
     """
     id: str = str(uuid4())
     first_name: str
     last_name: str
     email: EmailStr
-    password: SecretStr
+    password: str
     phone: str
-    address: Address
     status: StatusEnum = StatusEnum.PENDING
     is_active: bool = False
     last_login: datetime = ""
-    created_at: datetime = datetime.now()
-    updated_at: datetime = ""
-    deleted_at: datetime = ""
 
 
-class UserCreateRequest(BaseModel):
+class UserCreateRequest(TimeStampModel):
     """
     Model for user create from request
     Args:
-        BaseModel (Model): Model for user create from request
+        TimeStampModel (Model): The global model insert timestamp on model
     """
     first_name: str
     last_name: str
     email: EmailStr
-    password: SecretStr
-    confirm_password: SecretStr
+    password: str
+    confirm_password: str
     phone: str
     documents: List[Documents]
     address: List[Address]
-    account: List[UserBankAccountCreateRequest]
-
-
-class UserResponse(BaseModel):
-    """
-    Model for user return in response
-    Args:
-        BaseModel (Model): Model for user return in response
-    """
-    id: str
-    first_name: str
-    last_name: str
-    email: EmailStr
-    phone: str
-    documents: List[Documents]
-    address: Address
-    status: StatusEnum
-    is_active: bool
-    account: List[UserBankAccount]
-    last_login: datetime
-    created_at: datetime
-    updated_at: datetime
-    deleted_at: datetime
+    accounts: List[UserBankAccountCreateRequest]
