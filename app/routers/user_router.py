@@ -9,7 +9,8 @@ from models.users import (
     UserCreateRequest,
 )
 
-from database.controllers import create_user as UserController
+from database.controllers.user import create_user as UserController
+
 
 logger = logging.getLogger("UserLogger")
 

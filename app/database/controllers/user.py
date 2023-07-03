@@ -1,15 +1,19 @@
 import logging
 
-from database import database, Collections
 
 from pydantic import ValidationError, validator
 from pydantic.error_wrappers import ErrorWrapper
 
-from models.users import UserCreateRequest, User, UserBankAccount, Documents, Address
+from models.users import UserCreateRequest, User
 
 from settings import settings
 
 from services import Password
+
+from database import database, Collections
+from database.controllers.address import create_address
+from database.controllers.account import create_account
+from database.controllers.document import create_document
 
 
 logger = logging.getLogger("UserControllerLogger")
@@ -77,40 +81,13 @@ def create_user(user):
             ).dict()
 
             for address in user.address:
-                addresses.append(
-                    Address(
-                        user_id=user_payload["id"],
-                        street=address.street,
-                        number=address.number,
-                        complement=address.complement,
-                        neighborhood=address.neighborhood,
-                        city=address.city,
-                        state=address.state,
-                        country=address.country,
-                        zip_code=address.zip_code
-                    ).dict(),
-                )
-
+                create_address(user_payload["id"], address)
             for document in user.documents:
-                documents.append(
-                    Documents(
-                        user_id=user_payload["id"],
-                        document_type=document.document_type,
-                        document_number=document.document_number
-                    ).dict(),
-                )
+                create_document(user_payload["id"], document)
             for account in user.accounts:
-                accounts.append(
-                    UserBankAccount(
-                        user_id=user_payload["id"],
-                        account_type=account.account_type
-                    ).dict(),
-                )
+                create_account(user_payload["id"], account)
 
             database[Collections.USERS].insert_one(user_payload)
-            database[Collections.USER_ADDRESSES].insert_many(addresses)
-            database[Collections.USER_DOCUMENTS].insert_many(documents)
-            database[Collections.USER_BANK_ACCOUNTS].insert_many(accounts)
 
             return user
 
