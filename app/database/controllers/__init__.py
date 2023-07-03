@@ -1,1 +1,1 @@
-from database.controllers.user import UserController
+from database.controllers.user import create_user
