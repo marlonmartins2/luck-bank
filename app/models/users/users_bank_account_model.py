@@ -20,7 +20,7 @@ class BankAccount(TimeStampModel):
     account_type: AccountTypeEnum
     account_number: int = randint(100000, 999999)
     account_digit: int = randint(0, 9)
-    agency: int = '0001'
+    agency: int = "0001"
     agency_digit: int = 0
     status: StatusEnum = StatusEnum.PENDING
 
