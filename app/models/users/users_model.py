@@ -1,69 +1,20 @@
 from uuid import uuid4
 
-from random import randint
-
 from datetime import datetime
 
-from pydantic import EmailStr
+from typing import List
 
-from typing import Optional, List, Dict
+from pydantic import EmailStr, Field, validator
 
-from models.users import DocumentTypeEnum, StatusEnum, AccountTypeEnum
+from models import TimeStampModel, StatusEnum
 
-from models import TimeStampModel
+from models.users.users_address_model import Address
 
+from models.users.users_bank_account_model import BankAccountCreateRequest
 
-class Documents(TimeStampModel):
-    """
-    Model for documents
-    Args:
-        TimeStampModel (Model): The global model insert timestamp on model
-    """
-    user_id: Optional[str]
-    document_type: DocumentTypeEnum
-    document_number: str
+from models.users.users_documents_model import Documents
 
-
-class Address(TimeStampModel):
-    """
-    Model for address
-    Args:
-        TimeStampModel (Model): The global model insert timestamp on model
-    """
-    user_id: Optional[str]
-    street: str
-    number: str
-    complement: Optional[str]
-    neighborhood: str
-    city: str
-    state: str
-    country: str
-    zip_code: str
-
-
-class UserBankAccount(TimeStampModel):
-    """
-    Model for user bank account
-    Args:
-        TimeStampModel (Model): The global model insert timestamp on model
-    """
-    id: str = str(uuid4())
-    user_id: str
-    account_type: AccountTypeEnum
-    account_number: int = randint(100000, 999999)
-    account_digit: int = randint(0, 9)
-    agency: int = '0001'
-    agency_digit: int = 0
-    status: StatusEnum = StatusEnum.PENDING
-
-
-class UserBankAccountCreateRequest(TimeStampModel):
-    """
-    Model for user bank account create from request
-    Args:
-        TimeStampModel (Model): The global model insert timestamp on model
-    """
-    account_type: AccountTypeEnum
+from database.controllers.user import check_user_by_email
 
 
 class User(TimeStampModel):
@@ -89,12 +40,49 @@ class UserCreateRequest(TimeStampModel):
     Args:
         TimeStampModel (Model): The global model insert timestamp on model
     """
-    first_name: str
-    last_name: str
-    email: EmailStr
-    password: str
-    confirm_password: str
-    phone: str
+    class Config:
+        """
+        Config for user create from request
+        Args:
+            Config (Config): The global config for this model.
+        """
+        anystr_strip_whitespace = True
+
+    first_name: str = Field(..., min_length=1, max_length=50)
+    last_name: str = Field(..., min_length=1, max_length=50)
+    email: EmailStr = Field(...)
+    password: str = Field(..., min_length=8)
+    confirm_password: str = Field(..., min_length=8)
+    phone: str = Field(...)
     documents: List[Documents]
     address: List[Address]
-    accounts: List[UserBankAccountCreateRequest]
+    accounts: List[BankAccountCreateRequest]
+
+
+    @validator('confirm_password')
+    def passwords_match(cls, confirm_password, values):
+        """
+        Validator for passwords match
+        Args:
+            confirm_password (str): The password confirmation
+            values (dict): The values from request
+        Returns:
+            confirm_password (str): The password confirmation
+        """
+        if 'password' in values and confirm_password != values['password']:
+            raise ValueError('passwords do not match')
+        return confirm_password
+
+
+    @validator('email')
+    def email_has_exists(cls, email):
+        """
+        Validator for email exists in database.
+        Args:
+            email (str): The email from request
+        Returns:
+            email (str): The email from request
+        """
+        if check_user_by_email(email):
+            raise ValueError('email already exists')
+        return email
