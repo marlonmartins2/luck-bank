@@ -1,11 +1,19 @@
-import logging
+from utils.logger import Logger
 
 from database import database, Collections
 
 from models.users.users_address_model import Address
 
+from pymongo.errors import (
+    ServerSelectionTimeoutError,
+    ConnectionFailure,
+    OperationFailure,
+    PyMongoError
+)
 
-logger = logging.getLogger("AddressControllerLogger")
+
+
+logger = Logger.init("AddressControllerLogger")
 
 
 def create_address(user_id, address):
@@ -32,6 +40,28 @@ def create_address(user_id, address):
 
 
 def get_address_per_user(user_id):
-    address = database[Collections.USER_ADDRESSES].find({"user_id": user_id})
+    """
+    Get address per user.
+    Args:
+        user_id (str): The user id.
+    """
+    logger.info(f"Get address per user_id: ->: {user_id}")
+    payload = []
 
-    return list(address)
+    try:
+        addresses = database[Collections.USER_ADDRESSES].find({"user_id": user_id}, {"_id": 0})
+
+        for address in addresses:
+            payload.append(address)
+        return payload
+    except ServerSelectionTimeoutError as error:
+        logger.debug(f"ServerSelectionTimeoutError: {error}")
+
+    except ConnectionFailure as error:
+        logger.debug(f"ConnectionFailure: {error}")
+
+    except OperationFailure as error:
+        logger.debug(f"OperationFailure: {error}")
+
+    except PyMongoError as error:
+        logger.debug(f"PyMongoError: {error}")

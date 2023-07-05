@@ -1,11 +1,17 @@
-import logging
+from utils.logger import Logger
 
 from database import database, Collections
 
 from models.users.users_bank_account_model import BankAccount
 
+from pymongo.errors import (
+    ServerSelectionTimeoutError,
+    ConnectionFailure,
+    OperationFailure,
+    PyMongoError
+)
 
-logger = logging.getLogger("AccountControllerLogger")
+logger = Logger.init("AccountControllerLogger")
 
 
 def create_account(user_id, account):
@@ -25,6 +31,27 @@ def create_account(user_id, account):
 
 
 def get_accounts_per_user(user_id):
-    accounts = database[Collections.USER_BANK_ACCOUNTS].find({"user_id": user_id})
+    """
+    Get accounts per user.
+    Args:
+        user_id (str): The user id.
+    """
+    logger.info(f"Get accounts per user_id ->: {user_id}")
+    payload = []
+    try:
+        accounts = database[Collections.USER_BANK_ACCOUNTS].find({"user_id": user_id}, {"_id": 0})
 
-    return list(accounts)
+        for account in accounts:
+            payload.append(account)
+        return payload
+    except ServerSelectionTimeoutError as error:
+        logger.debug(f"ServerSelectionTimeoutError: {error}")
+
+    except ConnectionFailure as error:
+        logger.debug(f"ConnectionFailure: {error}")
+
+    except OperationFailure as error:
+        logger.debug(f"OperationFailure: {error}")
+
+    except PyMongoError as error:
+        logger.debug(f"PyMongoError: {error}")
