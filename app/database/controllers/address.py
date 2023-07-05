@@ -26,7 +26,7 @@ def create_address(user_id, address):
         state=address.state,
         country=address.country,
         zip_code=address.zip_code
-    ).dict(),
+    ).dict()
 
     database[Collections.USER_ADDRESSES].insert_one(address)
 

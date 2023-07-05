@@ -20,7 +20,7 @@ def create_document(user_id, document):
         user_id=user_id,
         document_type=document.document_type,
         document_number=document.document_number
-    ).dict(),
+    ).dict()
 
     database[Collections.USER_DOCUMENTS].insert_one(document)
 

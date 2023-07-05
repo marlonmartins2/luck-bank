@@ -19,12 +19,12 @@ def create_account(user_id, account):
     account = BankAccount(
         user_id=user_id,
         account_type=account.account_type
-    ).dict(),
+    ).dict()
 
-    database[Collections.USER_ACCOUNTS].insert_one(account)
+    database[Collections.USER_BANK_ACCOUNTS].insert_one(account)
 
 
 def get_accounts_per_user(user_id):
-    accounts = database[Collections.USER_ACCOUNTS].find({"user_id": user_id})
+    accounts = database[Collections.USER_BANK_ACCOUNTS].find({"user_id": user_id})
 
     return list(accounts)
