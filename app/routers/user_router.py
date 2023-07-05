@@ -1,13 +1,10 @@
 import logging
 
-from fastapi import APIRouter, status, Depends, BackgroundTasks
+from fastapi import APIRouter, status, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
-from models.users import (
-    User,
-    UserCreateRequest,
-)
+from models.users.users_model import UserCreateRequest
 
 from database.controllers.user import create_user as UserController
 
@@ -19,7 +16,7 @@ user_router = APIRouter(prefix="/user", tags=["User"])
 
 
 @user_router.post("/users/", status_code=status.HTTP_201_CREATED)
-def create_user(user: UserCreateRequest, background_tasks: BackgroundTasks):
+def create_user(user: UserCreateRequest):
     """
     Create user endpoint:
 
@@ -39,7 +36,7 @@ def create_user(user: UserCreateRequest, background_tasks: BackgroundTasks):
     """
     logger.info(f"Create user {user.email}")
 
-    background_tasks.add_task(UserController, user)
+    UserController(user)
 
     return JSONResponse(
         status_code=status.HTTP_201_CREATED,
