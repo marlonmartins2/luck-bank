@@ -1,15 +1,16 @@
-import logging
+from utils.logger import Logger
 
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
 from models.users.users_model import UserCreateRequest
 
-from database.controllers.user import create_user as UserController
+from database.controllers.user import create_user_model
+from database.controllers.user import get_user_by_id
 
 
-logger = logging.getLogger("UserLogger")
+logger = Logger.init("UserRouteLogger")
 
 
 user_router = APIRouter(prefix="/user", tags=["User"])
@@ -36,9 +37,29 @@ def create_user(user: UserCreateRequest):
     """
     logger.info(f"Create user {user.email}")
 
-    UserController(user)
+    create_user_model(user)
 
     return JSONResponse(
         status_code=status.HTTP_201_CREATED,
         content="Please check your email to confirm your account."
+    )
+
+
+@user_router.get("/users/{user_id}/", status_code=status.HTTP_200_OK)
+def get_user(user_id: str):
+    """
+    Get user endpoint:
+
+    - **user_id**: the user id(str)
+
+    Returns:
+    - **UserResponse** (User): User data to database return.
+    """
+    logger.info(f"Get user {user_id}")
+
+    user = get_user_by_id(user_id)
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=jsonable_encoder(user)
     )
