@@ -2,7 +2,7 @@ from uuid import uuid4
 
 from random import randint
 
-from datetime import datetime
+from pydantic import BaseModel
 
 from models.enums import StatusEnum, AccountTypeEnum
 
@@ -15,7 +15,6 @@ class BankAccount(TimeStampModel):
     Args:
         TimeStampModel (Model): The global model insert timestamp on model
     """
-    id: str = str(uuid4())
     user_id: str
     account_type: AccountTypeEnum
     account_number: int = randint(100000, 999999)
@@ -25,10 +24,10 @@ class BankAccount(TimeStampModel):
     status: StatusEnum = StatusEnum.PENDING
 
 
-class BankAccountCreateRequest(TimeStampModel):
+class BankAccountCreateRequest(BaseModel):
     """
     Model for user bank account create from request
     Args:
-        TimeStampModel (Model): The global model insert timestamp on model
+        BaseModel (Pydantic): The Pydantic base model.
     """
     account_type: AccountTypeEnum

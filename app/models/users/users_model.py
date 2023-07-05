@@ -4,15 +4,15 @@ from datetime import datetime
 
 from typing import List
 
-from pydantic import EmailStr, Field, validator
+from pydantic import EmailStr, Field, validator, BaseModel
 
 from models import TimeStampModel, StatusEnum
 
-from models.users.users_address_model import Address
+from models.users.users_address_model import AddressCreateRequest
 
 from models.users.users_bank_account_model import BankAccountCreateRequest
 
-from models.users.users_documents_model import Documents
+from models.users.users_documents_model import DocumentsCreateRequest
 
 from database.controllers.user import check_user_by_email
 
@@ -23,7 +23,6 @@ class User(TimeStampModel):
     Args:
         TimeStampModel (Model): The global model insert timestamp on model
     """
-    id: str = str(uuid4())
     first_name: str
     last_name: str
     email: EmailStr
@@ -34,11 +33,11 @@ class User(TimeStampModel):
     last_login: datetime = ""
 
 
-class UserCreateRequest(TimeStampModel):
+class UserCreateRequest(BaseModel):
     """
     Model for user create from request
     Args:
-        TimeStampModel (Model): The global model insert timestamp on model
+        BaseModel (Pydantic): the Pydantic base model.
     """
     class Config:
         """
@@ -54,8 +53,8 @@ class UserCreateRequest(TimeStampModel):
     password: str = Field(..., min_length=8)
     confirm_password: str = Field(..., min_length=8)
     phone: str = Field(...)
-    documents: List[Documents]
-    address: List[Address]
+    documents: List[DocumentsCreateRequest]
+    address: List[AddressCreateRequest]
     accounts: List[BankAccountCreateRequest]
 
 
