@@ -59,6 +59,20 @@ class UserCreateRequest(TimeStampModel):
     accounts: List[BankAccountCreateRequest]
 
 
+    @validator('email')
+    def email_has_exists(cls, email):
+        """
+        Validator for email exists in database.
+        Args:
+            email (str): The email from request
+        Returns:
+            email (str): The email from request
+        """
+        if check_user_by_email(email):
+            raise ValueError('email already exists in database')
+        return email
+
+
     @validator('confirm_password')
     def passwords_match(cls, confirm_password, values):
         """
@@ -72,17 +86,3 @@ class UserCreateRequest(TimeStampModel):
         if 'password' in values and confirm_password != values['password']:
             raise ValueError('passwords do not match')
         return confirm_password
-
-
-    @validator('email')
-    def email_has_exists(cls, email):
-        """
-        Validator for email exists in database.
-        Args:
-            email (str): The email from request
-        Returns:
-            email (str): The email from request
-        """
-        if check_user_by_email(email):
-            raise ValueError('email already exists')
-        return email
