@@ -46,6 +46,7 @@ class UserCreateRequest(BaseModel):
             Config (Config): The global config for this model.
         """
         anystr_strip_whitespace = True
+        anystr_lower = True
 
     first_name: str = Field(..., min_length=1, max_length=50)
     last_name: str = Field(..., min_length=1, max_length=50)
@@ -96,6 +97,7 @@ class UserUpdateRequest(BaseModel):
         Config for user update request model.
         """
         anystr_strip_whitespace = True
+        anystr_lower = True
 
     first_name: Optional[str] = Field(None, min_length=1, max_length=50)
     last_name: Optional[str] = Field(None, min_length=1, max_length=50)

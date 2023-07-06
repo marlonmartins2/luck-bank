@@ -11,6 +11,16 @@ class Address(TimeStampModel):
     Args:
         TimeStampModel (Model): The global model insert timestamp on model
     """
+
+    class Config:
+        """
+        Config for address
+        Args:
+            Config (Config): The global config for this model.
+        """
+        anystr_strip_whitespace = True
+        anystr_lower = True
+
     user_id: str
     street: str
     number: str
