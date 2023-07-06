@@ -2,7 +2,7 @@ from uuid import uuid4
 
 from datetime import datetime
 
-from typing import List
+from typing import List, Optional
 
 from pydantic import EmailStr, Field, validator, BaseModel
 
@@ -85,3 +85,19 @@ class UserCreateRequest(BaseModel):
         if "password" in values and confirm_password != values["password"]:
             raise ValueError("passwords do not match")
         return confirm_password
+
+
+class UserUpdateRequest(BaseModel):
+    """
+    Model for updating user.
+    """
+    class Config:
+        """
+        Config for user update request model.
+        """
+        anystr_strip_whitespace = True
+
+    first_name: Optional[str] = Field(None, min_length=1, max_length=50)
+    last_name: Optional[str] = Field(None, min_length=1, max_length=50)
+    email: Optional[EmailStr] = Field(None)
+    phone: Optional[str] = Field(None)
