@@ -74,11 +74,11 @@ def check_user_by_email(email):
         email (str): The user email.
     """
     logger.info(f"Check user by email ->: {email}")
-    user_has_exist = database[Collections.USERS].find_one({"email": email})
+    user = database[Collections.USERS].find_one({"email": email}, {"_id": 0})
 
-    if user_has_exist:
+    if user:
         logger.error(f"User already exists: {email}")
-        return True
+        return user
 
     logger.info(f"User not exists: {email}")
     return False
@@ -178,7 +178,7 @@ def delete_user_by_id(user_id):
     Args:
         user_id (str): The user id.
     """
-    logger.info(f"delete user by id ->: {user_id}\n ")
+    logger.info(f"delete user by id ->: {user_id}")
     try:
         user = database[Collections.USERS].find_one({"id": user_id}, {"_id": 0})
         
@@ -189,6 +189,79 @@ def delete_user_by_id(user_id):
         database[Collections.USERS].update_one(
             {"id": user_id},
             {"$set": {"deleted_at": datetime.now()}}
+        )
+
+        return True
+
+    except ServerSelectionTimeoutError as error:
+        logger.debug(f"ServerSelectionTimeoutError: {error}")
+        return False
+
+    except ConnectionFailure as error:
+        logger.debug(f"ConnectionFailure: {error}")
+        return False
+
+    except OperationFailure as error:
+        logger.debug(f"OperationFailure: {error}")
+        return False
+
+    except PyMongoError as error:
+        logger.debug(f"PyMongoError: {error}")
+        return False
+
+
+def user_detail(user_id):
+    """
+    Get user detail by id
+    Args:
+        user_id (str): The user id.
+    """
+    logger.info(f"get user detail by id ->: {user_id}")
+
+    try:
+        user = database[Collections.USERS].find_one({"id": user_id}, {"_id": 0})
+
+        return {
+            "id": user["id"],
+            "first_name": user["first_name"],
+            "last_name": user["last_name"],
+            "email": user["email"],
+            "phone": user["phone"],
+            "status": user["status"],
+            "is_active": user["is_active"],
+            "last_login": user["last_login"],
+            "created_at": user["created_at"],
+            "updated_at": user["updated_at"],
+        }
+
+    except ServerSelectionTimeoutError as error:
+        logger.debug(f"ServerSelectionTimeoutError: {error}")
+        return False
+
+    except ConnectionFailure as error:
+        logger.debug(f"ConnectionFailure: {error}")
+        return False
+
+    except OperationFailure as error:
+        logger.debug(f"OperationFailure: {error}")
+        return False
+
+    except PyMongoError as error:
+        logger.debug(f"PyMongoError: {error}")
+        return False
+
+
+def set_last_login(user_id):
+    """
+    Set last login in user database
+    Args:
+        user_id (str): The user id.
+    """
+    logger.info(f"set user last login id ->: {user_id}")
+    try:    
+        database[Collections.USERS].update_one(
+            {"id": user_id},
+            {"$set": {"last_login": datetime.now()}}
         )
 
         return True
