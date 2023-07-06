@@ -7,7 +7,10 @@ from settings import settings
 
 from version import __version__
 
-from routers import user_router
+from routers import (
+    user_router,
+    auth_router,
+)
 
 
 app = FastAPI(
@@ -35,7 +38,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+app.include_router(auth_router)
 app.include_router(user_router)
 
 @app.get("/health_check")
