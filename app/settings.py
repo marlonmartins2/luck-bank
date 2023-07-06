@@ -22,7 +22,11 @@ class Settings(BaseSettings):
     PATH_CERT: str
     DATABASE_ENVIRONMENT: str
 
-    #config settings
-    MINIMUM_PASSWORD_LENGTH: int = 8
+    # JWT settings
+    ACCESS_TOKEN_EXPIRES_IN: int
+    REFRESH_TOKEN_EXPIRES_IN: int
+    JWT_ALGORITHM: str
+    JWT_PRIVATE_KEY: str
+    JWT_PUBLIC_KEY: str
 
 settings = Settings()
