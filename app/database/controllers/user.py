@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from utils.logger import Logger
 
 from services import Password
@@ -92,6 +94,7 @@ def get_user_by_id(user_id):
     response = None
     try:
         user = database[Collections.USERS].find_one({"id": user_id}, {"_id": 0})
+
         if not user:
             logger.error(f"User not found: {user_id}")
             raise ValueError("User not found")
@@ -126,3 +129,82 @@ def get_user_by_id(user_id):
 
     except PyMongoError as error:
         logger.debug(f"PyMongoError: {error}")
+
+
+def update_user_model(user_id, user):
+    """
+    Update user by id
+    Args:
+        user_id (str): The user id.
+        payload (dict): The user data.
+    """
+    logger.info(f"update user by id ->: {user_id}\npayload: {user}")
+    try:
+        payload = user.dict()
+        payload["updated_at"] = datetime.now()
+        user = database[Collections.USERS].find_one({"id": user_id}, {"_id": 0})
+        
+        if not user:
+            logger.error(f"User not found: {user_id}")
+            raise ValueError("User not found")
+        
+        database[Collections.USERS].update_one(
+            {"id": user_id},
+            {"$set": payload}
+        )
+
+        return payload
+
+    except ServerSelectionTimeoutError as error:
+        logger.debug(f"ServerSelectionTimeoutError: {error}")
+        return False
+
+    except ConnectionFailure as error:
+        logger.debug(f"ConnectionFailure: {error}")
+        return False
+
+    except OperationFailure as error:
+        logger.debug(f"OperationFailure: {error}")
+        return False
+
+    except PyMongoError as error:
+        logger.debug(f"PyMongoError: {error}")
+        return False
+
+
+def delete_user_by_id(user_id):
+    """
+    Delete user by id
+    Args:
+        user_id (str): The user id.
+    """
+    logger.info(f"delete user by id ->: {user_id}\n ")
+    try:
+        user = database[Collections.USERS].find_one({"id": user_id}, {"_id": 0})
+        
+        if not user:
+            logger.error(f"User not found: {user_id}")
+            raise ValueError("User not found")
+        
+        database[Collections.USERS].update_one(
+            {"id": user_id},
+            {"$set": {"deleted_at": datetime.now()}}
+        )
+
+        return True
+
+    except ServerSelectionTimeoutError as error:
+        logger.debug(f"ServerSelectionTimeoutError: {error}")
+        return False
+
+    except ConnectionFailure as error:
+        logger.debug(f"ConnectionFailure: {error}")
+        return False
+
+    except OperationFailure as error:
+        logger.debug(f"OperationFailure: {error}")
+        return False
+
+    except PyMongoError as error:
+        logger.debug(f"PyMongoError: {error}")
+        return False
