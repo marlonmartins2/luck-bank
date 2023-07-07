@@ -1,4 +1,4 @@
-name: Gerar Release
+name: Create Release
 
 on:
   push:
@@ -10,28 +10,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout do repositório
+      - name: Checkout the repository
         uses: actions/checkout@v2
 
-      - name: Obtendo a versão do arquivo .version
-        id: version
-        run: echo ::set-output name=version::$(cat .version)
-
-      - name: Obtendo as mudanças correspondentes à versão atual
-        id: changes
+      - name: Set environment variables
+        id: vars
         run: |
-          version=${{ steps.version.outputs.version }}
-          changes=$(awk "/## $version/{flag=1; next}/##/{flag=0}flag" CHANGELOG.md)
-          echo ::set-output name=changes::$changes
+          echo "project_version=$(cat .version)" >> $GITHUB_OUTPUT
 
-      - name: Criando uma nova release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get Changelog Entry
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v2.2.0
         with:
-          tag_name: ${{ steps.version.outputs.version }}
-          release_name: ${{ steps.version.outputs.version }}
-          body: ${{ steps.changes.outputs.changes }}
-          draft: false
-          prerelease: false
+          validation_depth: 10
+          version: ${{ steps.vars.outputs.project_version }}
+          path: ./CHANGELOG.md
+
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1.11.1
+        with:
+          tag: v${{ steps.vars.outputs.project_version }}
+          name: v${{ steps.vars.outputs.project_version }}
+          body: ${{ steps.changelog_reader.outputs.changes }}
+          prerelease: ${{ steps.changelog_reader.outputs.status == 'prereleased' }}
+          draft: ${{ steps.changelog_reader.outputs.status == 'unreleased' }}
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
