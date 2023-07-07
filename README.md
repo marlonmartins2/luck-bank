@@ -5,6 +5,9 @@
   # Luck-Bank is a cutting-edge digital banking repository designed to provide you with a seamless and convenient banking experience.
 </h3>
 
+## :memo: Release:
+- [Latest](https://github.com/marlonmartins2/luck-bank/releases/latest)
+
 ## :rocket: Stack
 - Docker / docker-compose
 - Python 3.11 (official stable)
