@@ -55,16 +55,16 @@ def create_user_model(user):
         raise ValueError(error)
 
     except ServerSelectionTimeoutError as error:
-        logger.debug(f"ServerSelectionTimeoutError: {error}")
+        logger.error(f"ServerSelectionTimeoutError: {error}")
 
     except ConnectionFailure as error:
-        logger.debug(f"ConnectionFailure: {error}")
+        logger.error(f"ConnectionFailure: {error}")
 
     except OperationFailure as error:
-        logger.debug(f"OperationFailure: {error}")
+        logger.error(f"OperationFailure: {error}")
 
     except PyMongoError as error:
-        logger.debug(f"PyMongoError: {error}")
+        logger.error(f"PyMongoError: {error}")
 
 
 def check_user_by_email(email):
@@ -119,16 +119,16 @@ def get_user_by_id(user_id):
         return response
 
     except ServerSelectionTimeoutError as error:
-        logger.debug(f"ServerSelectionTimeoutError: {error}")
+        logger.error(f"ServerSelectionTimeoutError: {error}")
 
     except ConnectionFailure as error:
-        logger.debug(f"ConnectionFailure: {error}")
+        logger.error(f"ConnectionFailure: {error}")
 
     except OperationFailure as error:
-        logger.debug(f"OperationFailure: {error}")
+        logger.error(f"OperationFailure: {error}")
 
     except PyMongoError as error:
-        logger.debug(f"PyMongoError: {error}")
+        logger.error(f"PyMongoError: {error}")
 
 
 def update_user_model(user_id, user):
@@ -153,19 +153,19 @@ def update_user_model(user_id, user):
         return user
 
     except ServerSelectionTimeoutError as error:
-        logger.debug(f"ServerSelectionTimeoutError: {error}")
+        logger.error(f"ServerSelectionTimeoutError: {error}")
         return False
 
     except ConnectionFailure as error:
-        logger.debug(f"ConnectionFailure: {error}")
+        logger.error(f"ConnectionFailure: {error}")
         return False
 
     except OperationFailure as error:
-        logger.debug(f"OperationFailure: {error}")
+        logger.error(f"OperationFailure: {error}")
         return False
 
     except PyMongoError as error:
-        logger.debug(f"PyMongoError: {error}")
+        logger.error(f"PyMongoError: {error}")
         return False
 
 
@@ -191,19 +191,19 @@ def delete_user_by_id(user_id):
         return True
 
     except ServerSelectionTimeoutError as error:
-        logger.debug(f"ServerSelectionTimeoutError: {error}")
+        logger.error(f"ServerSelectionTimeoutError: {error}")
         return False
 
     except ConnectionFailure as error:
-        logger.debug(f"ConnectionFailure: {error}")
+        logger.error(f"ConnectionFailure: {error}")
         return False
 
     except OperationFailure as error:
-        logger.debug(f"OperationFailure: {error}")
+        logger.error(f"OperationFailure: {error}")
         return False
 
     except PyMongoError as error:
-        logger.debug(f"PyMongoError: {error}")
+        logger.error(f"PyMongoError: {error}")
         return False
 
 
@@ -232,19 +232,19 @@ def user_detail(user_id):
         }
 
     except ServerSelectionTimeoutError as error:
-        logger.debug(f"ServerSelectionTimeoutError: {error}")
+        logger.error(f"ServerSelectionTimeoutError: {error}")
         return False
 
     except ConnectionFailure as error:
-        logger.debug(f"ConnectionFailure: {error}")
+        logger.error(f"ConnectionFailure: {error}")
         return False
 
     except OperationFailure as error:
-        logger.debug(f"OperationFailure: {error}")
+        logger.error(f"OperationFailure: {error}")
         return False
 
     except PyMongoError as error:
-        logger.debug(f"PyMongoError: {error}")
+        logger.error(f"PyMongoError: {error}")
         return False
 
 
@@ -264,17 +264,17 @@ def set_last_login(user_id):
         return True
 
     except ServerSelectionTimeoutError as error:
-        logger.debug(f"ServerSelectionTimeoutError: {error}")
+        logger.error(f"ServerSelectionTimeoutError: {error}")
         return False
 
     except ConnectionFailure as error:
-        logger.debug(f"ConnectionFailure: {error}")
+        logger.error(f"ConnectionFailure: {error}")
         return False
 
     except OperationFailure as error:
-        logger.debug(f"OperationFailure: {error}")
+        logger.error(f"OperationFailure: {error}")
         return False
 
     except PyMongoError as error:
-        logger.debug(f"PyMongoError: {error}")
+        logger.error(f"PyMongoError: {error}")
         return False

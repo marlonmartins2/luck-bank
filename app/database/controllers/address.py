@@ -80,16 +80,16 @@ def create_address(user_id, address):
         return address
 
     except ServerSelectionTimeoutError as error:
-        logger.debug(f"ServerSelectionTimeoutError: {error}")
+        logger.error(f"ServerSelectionTimeoutError: {error}")
 
     except ConnectionFailure as error:
-        logger.debug(f"ConnectionFailure: {error}")
+        logger.error(f"ConnectionFailure: {error}")
 
     except OperationFailure as error:
-        logger.debug(f"OperationFailure: {error}")
+        logger.error(f"OperationFailure: {error}")
 
     except PyMongoError as error:
-        logger.debug(f"PyMongoError: {error}")
+        logger.error(f"PyMongoError: {error}")
 
 
 def get_address_per_user(user_id):
@@ -112,16 +112,16 @@ def get_address_per_user(user_id):
         return payload
 
     except ServerSelectionTimeoutError as error:
-        logger.debug(f"ServerSelectionTimeoutError: {error}")
+        logger.error(f"ServerSelectionTimeoutError: {error}")
 
     except ConnectionFailure as error:
-        logger.debug(f"ConnectionFailure: {error}")
+        logger.error(f"ConnectionFailure: {error}")
 
     except OperationFailure as error:
-        logger.debug(f"OperationFailure: {error}")
+        logger.error(f"OperationFailure: {error}")
 
     except PyMongoError as error:
-        logger.debug(f"PyMongoError: {error}")
+        logger.error(f"PyMongoError: {error}")
 
 
 def get_address_by_id(user_id , address_id):
@@ -149,16 +149,16 @@ def get_address_by_id(user_id , address_id):
         return address
 
     except ServerSelectionTimeoutError as error:
-        logger.debug(f"ServerSelectionTimeoutError: {error}")
+        logger.error(f"ServerSelectionTimeoutError: {error}")
 
     except ConnectionFailure as error:
-        logger.debug(f"ConnectionFailure: {error}")
+        logger.error(f"ConnectionFailure: {error}")
 
     except OperationFailure as error:
-        logger.debug(f"OperationFailure: {error}")
+        logger.error(f"OperationFailure: {error}")
 
     except PyMongoError as error:
-        logger.debug(f"PyMongoError: {error}")
+        logger.error(f"PyMongoError: {error}")
 
 
 def update_address(user_id, address_id, payload):
@@ -187,16 +187,16 @@ def update_address(user_id, address_id, payload):
         return address
 
     except ServerSelectionTimeoutError as error:
-        logger.debug(f"ServerSelectionTimeoutError: {error}")
+        logger.error(f"ServerSelectionTimeoutError: {error}")
 
     except ConnectionFailure as error:
-        logger.debug(f"ConnectionFailure: {error}")
+        logger.error(f"ConnectionFailure: {error}")
 
     except OperationFailure as error:
-        logger.debug(f"OperationFailure: {error}")
+        logger.error(f"OperationFailure: {error}")
 
     except PyMongoError as error:
-        logger.debug(f"PyMongoError: {error}")
+        logger.error(f"PyMongoError: {error}")
 
 
 def delete_address(address_id, user_id):
@@ -216,13 +216,13 @@ def delete_address(address_id, user_id):
         return True
 
     except ServerSelectionTimeoutError as error:
-        logger.debug(f"ServerSelectionTimeoutError: {error}")
+        logger.error(f"ServerSelectionTimeoutError: {error}")
 
     except ConnectionFailure as error:
-        logger.debug(f"ConnectionFailure: {error}")
+        logger.error(f"ConnectionFailure: {error}")
 
     except OperationFailure as error:
-        logger.debug(f"OperationFailure: {error}")
+        logger.error(f"OperationFailure: {error}")
 
     except PyMongoError as error:
-        logger.debug(f"PyMongoError: {error}")
+        logger.error(f"PyMongoError: {error}")
