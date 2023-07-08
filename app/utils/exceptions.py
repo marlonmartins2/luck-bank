@@ -4,3 +4,7 @@ class NotVerified(Exception):
 
 class UserNotFound(Exception):
     pass
+
+
+class UserDeleted(Exception):
+    pass

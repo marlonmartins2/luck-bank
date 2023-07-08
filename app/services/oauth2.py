@@ -12,7 +12,7 @@ from settings import settings
 
 from database.controllers.user import get_user_by_id
 
-from utils import UserNotFound, NotVerified
+from utils import UserNotFound, NotVerified, UserDeleted
 
 from utils.logger import Logger
 
@@ -69,6 +69,9 @@ def require_user(Authorize: AuthJWT = Depends()):
 
         user = get_user_by_id(user_id)
 
+        if user["deleted_at"]:
+            raise UserDeleted('User deleted')
+
         if not user:
             raise UserNotFound('User no longer exist')
 
@@ -87,6 +90,9 @@ def require_user(Authorize: AuthJWT = Depends()):
 
         if error == 'NotVerified':
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Please verify your account')
+
+        if error == 'UserDeleted':
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='User disabled please contact support.')
 
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Token is invalid or has expired')
 
