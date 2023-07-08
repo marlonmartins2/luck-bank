@@ -11,6 +11,7 @@
 ## :rocket: Stack
 - Docker / docker-compose
 - Python 3.11 (official stable)
+- FastAPI 0.95.x
 - PyMongo 4.3.x
 - Uvicorn 0.22.x
 
