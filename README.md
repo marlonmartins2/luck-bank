@@ -69,8 +69,10 @@ source .venv/bin/activate && cd app && uvicorn app.main:app --reload --use-color
 ```
 
 > Check the Endpoint:
-[APIDOC](http://localhost:8000/docs)
-[APIREDOC](http://localhost:8000/redoc)
+
+- [APIDOC](http://localhost:8000/docs)
+
+- [APIREDOC](http://localhost:8000/redoc)
 
 ## :evergreen_tree: Branchs
 
