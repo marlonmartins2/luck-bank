@@ -74,7 +74,7 @@ def check_user_by_email(email):
         email (str): The user email.
     """
     logger.info(f"Check user by email ->: {email}")
-    user = database[Collections.USERS].find_one({"email": email}, {"_id": 0, "password": 0})
+    user = database[Collections.USERS].find_one({"email": email}, {"_id": 0})
 
     if user:
         logger.error(f"User already exists: {email}")
