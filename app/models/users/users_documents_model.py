@@ -23,6 +23,5 @@ class DocumentsCreateRequest(BaseModel):
     Args:
         BaseModel (Pydantic): The Pydantic base model.
     """
-    user_id: str
     document_type: DocumentTypeEnum
     document_number: str
