@@ -74,7 +74,7 @@ def check_user_by_email(email):
         email (str): The user email.
     """
     logger.info(f"Check user by email ->: {email}")
-    user = database[Collections.USERS].find_one({"email": email}, {"_id": 0})
+    user = database[Collections.USERS].find_one({"email": email}, {"_id": 0, "password": 0})
 
     if user:
         logger.error(f"User already exists: {email}")
@@ -93,7 +93,7 @@ def get_user_by_id(user_id):
     logger.info(f"Get user by id ->: {user_id}")
     response = None
     try:
-        user = database[Collections.USERS].find_one({"id": user_id}, {"_id": 0})
+        user = database[Collections.USERS].find_one({"id": user_id}, {"_id": 0, "password": 0})
 
         if not user:
             logger.error(f"User not found: {user_id}")
@@ -140,20 +140,17 @@ def update_user_model(user_id, user):
     """
     logger.info(f"update user by id ->: {user_id}\npayload: {user}")
     try:
-        payload = user.dict()
+        payload = user.dict(exclude_none=True)
         payload["updated_at"] = datetime.now()
-        user = database[Collections.USERS].find_one({"id": user_id}, {"_id": 0})
-        
-        if not user:
-            logger.error(f"User not found: {user_id}")
-            raise ValueError("User not found")
         
         database[Collections.USERS].update_one(
             {"id": user_id},
             {"$set": payload}
         )
 
-        return payload
+        user = database[Collections.USERS].find_one({"id": user_id}, {"_id": 0, "password": 0})
+
+        return user
 
     except ServerSelectionTimeoutError as error:
         logger.debug(f"ServerSelectionTimeoutError: {error}")
@@ -180,7 +177,7 @@ def delete_user_by_id(user_id):
     """
     logger.info(f"delete user by id ->: {user_id}")
     try:
-        user = database[Collections.USERS].find_one({"id": user_id}, {"_id": 0})
+        user = database[Collections.USERS].find_one({"id": user_id}, {"_id": 0, "password": 0})
         
         if not user:
             logger.error(f"User not found: {user_id}")
@@ -219,7 +216,7 @@ def user_detail(user_id):
     logger.info(f"get user detail by id ->: {user_id}")
 
     try:
-        user = database[Collections.USERS].find_one({"id": user_id}, {"_id": 0})
+        user = database[Collections.USERS].find_one({"id": user_id}, {"_id": 0, "password": 0})
 
         return {
             "id": user["id"],
