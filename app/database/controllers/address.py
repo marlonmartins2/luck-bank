@@ -138,6 +138,14 @@ def get_address_by_id(user_id , address_id):
             {"_id": 0}
         )
 
+        if not address:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={
+                    "message": "Address not found",
+                }
+            )
+
         return address
 
     except ServerSelectionTimeoutError as error:
