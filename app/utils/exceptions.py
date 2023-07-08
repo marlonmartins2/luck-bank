@@ -8,3 +8,7 @@ class UserNotFound(Exception):
 
 class UserDeleted(Exception):
     pass
+
+
+class AccountNotSalary(Exception):
+    pass
