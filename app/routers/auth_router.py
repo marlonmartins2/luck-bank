@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from utils.logger import Logger
 
@@ -14,7 +14,10 @@ from settings import settings
 
 from models.auth.login_model import LoginUserRequest
 
+from models.users.users_model import UserCreateRequest
+
 from database.controllers.user import (
+    create_user_model,
     check_user_by_email,
     get_user_by_id,
     set_last_login,
@@ -27,6 +30,36 @@ logger = Logger.init("AuthRouterLogger")
 auth_router = APIRouter(tags=["Auth"])
 ACCESS_TOKEN = settings.ACCESS_TOKEN_EXPIRES_IN
 REFRESH_TOKEN = settings.REFRESH_TOKEN_EXPIRES_IN
+
+
+@auth_router.post("/register/", status_code=status.HTTP_201_CREATED)
+def create_user(user: UserCreateRequest):
+    """
+    Create user endpoint:
+
+    - **first_name**: the user first name(str)
+    - **last_name**: the user last name(str)
+    - **email**: the user email(valid email str)
+    - **password**: the user password(str > 8 length)
+    - **confirm_password**: the user password confirmation(str > 8 length)
+    - **phone**: the user phone(str)
+    - **documents**: the user documents(list)
+    - **address**: the user address(list)
+    - **accounts**: the user accounts(list)
+
+    Returns:
+    - **UserResponse** (User): User data to be created.
+    - **AccountResponse** (UserBankAccount): User bank account data to be created.
+    """
+    logger.info(f"Create user {user.email}")
+
+    create_user_model(user)
+
+    return JSONResponse(
+        status_code=status.HTTP_201_CREATED,
+        content="Please check your email to confirm your account."
+    )
+
 
 @auth_router.post("/login/", status_code=status.HTTP_200_OK)
 def login(payload: LoginUserRequest, Authorize: AuthJWT = Depends()):
