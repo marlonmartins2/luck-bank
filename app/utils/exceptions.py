@@ -12,3 +12,7 @@ class UserDeleted(Exception):
 
 class AccountNotSalary(Exception):
     pass
+
+
+class ExistOneInDatabase(Exception):
+    pass
