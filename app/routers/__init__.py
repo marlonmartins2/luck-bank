@@ -2,3 +2,4 @@ from routers.user_router import user_router
 from routers.auth_router import auth_router
 from routers.accounts_router import accounts_router
 from routers.address_router import address_router
+from routers.documents_router import documents_router
