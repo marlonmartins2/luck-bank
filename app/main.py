@@ -8,8 +8,10 @@ from settings import settings
 from version import __version__
 
 from routers import (
-    user_router,
     auth_router,
+    accounts_router,
+    address_router,
+    user_router,
 )
 
 
@@ -40,6 +42,8 @@ app.add_middleware(
 
 app.include_router(auth_router)
 app.include_router(user_router)
+app.include_router(address_router)
+app.include_router(accounts_router)
 
 @app.get("/health_check")
 def health_check():
